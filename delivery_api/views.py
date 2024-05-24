@@ -5,22 +5,21 @@ from .models import DeliveryDepartment, Courier
 from .serializers import DeliveryDepartmentSerializer, CourierSerializer
 
 
-
 class CourierActionAPIView(APIView):
 
     def get(self, request):
-        courier_id = request.query_params.get('id')
+        courier_id = request.query_params.get('external_id')
         if courier_id:
             try:
                 courier = Courier.objects.get(external_id=courier_id)
                 serializer = CourierSerializer(courier)
-                return Response(serializer.data)
+                return Response({'courier': serializer.data})
             except Courier.DoesNotExist:
                 return Response({'error': 'Courier not found'}, status=status.HTTP_404_NOT_FOUND)
         else:
             couriers = Courier.objects.all()
             serializer = CourierSerializer(couriers, many=True)
-            return Response(serializer.data)
+            return Response({'courier': serializer.data})
 
     def post(self, request):
         data = request.data
@@ -36,7 +35,7 @@ class CourierActionAPIView(APIView):
         elif action == 12:  # Обновление курьера
             courier_data = data.get('courier')
             try:
-                courier = Courier.objects.get(external_id=courier_data.get('id'))
+                courier = Courier.objects.get(external_id=courier_data.get('external_id'))
                 serializer = CourierSerializer(courier, data=courier_data, partial=True)  # частичное обновление
                 if serializer.is_valid():
                     serializer.save()
@@ -46,7 +45,7 @@ class CourierActionAPIView(APIView):
                 return Response({'error': 'Courier not found'}, status=status.HTTP_404_NOT_FOUND)
 
         elif action == 13:  # Удаление курьера
-            courier_id = data.get('courier', {}).get('id')
+            courier_id = data.get('courier', {}).get('external_id')
             try:
                 courier = Courier.objects.get(external_id=courier_id)
                 courier.delete()
@@ -59,18 +58,18 @@ class CourierActionAPIView(APIView):
 
 class DeliveryDepartmentActionAPIView(APIView):
     def get(self, request):
-        department_id = request.query_params.get('id')
+        department_id = request.query_params.get('external_id')
         if department_id:
             try:
                 department = DeliveryDepartment.objects.get(external_id=department_id)
                 serializer = DeliveryDepartmentSerializer(department)
-                return Response(serializer.data)
+                return Response({'departments': serializer.data})
             except DeliveryDepartment.DoesNotExist:
                 return Response({'error': 'Delivery Department not found'}, status=status.HTTP_404_NOT_FOUND)
         else:
             departments = DeliveryDepartment.objects.all()
             serializer = DeliveryDepartmentSerializer(departments, many=True)
-            return Response(serializer.data)
+            return Response({'departments': serializer.data})
 
     def post(self, request):
         data = request.data
@@ -86,7 +85,7 @@ class DeliveryDepartmentActionAPIView(APIView):
         elif action == 12:
             department_data = data.get('department')
             try:
-                department = DeliveryDepartment.objects.get(external_id=department_data.get('id'))
+                department = DeliveryDepartment.objects.get(external_id=department_data.get('external_id'))
                 serializer = DeliveryDepartmentSerializer(department, data=department_data)
                 if serializer.is_valid():
                     serializer.save()
@@ -96,7 +95,7 @@ class DeliveryDepartmentActionAPIView(APIView):
                 return Response({'error': 'Delivery Department not found'}, status=status.HTTP_404_NOT_FOUND)
 
         elif action == 13:
-            department_id = data.get('department', {}).get('id')
+            department_id = data.get('department', {}).get('external_id')
             try:
                 department = DeliveryDepartment.objects.get(external_id=department_id)
                 department.delete()
