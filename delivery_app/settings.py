@@ -52,6 +52,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+JAZZMIN_SETTINGS = {
+    'show_ui_builder': True,
+}
+
+
 ROOT_URLCONF = 'delivery_app.urls'
 
 TEMPLATES = [
