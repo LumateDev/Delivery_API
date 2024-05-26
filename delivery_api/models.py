@@ -29,7 +29,7 @@ class Courier(models.Model):
     middle_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=255, unique=True, null=True, blank=True)
     phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True) #BigIntegerField возможно
+    start_date = models.BigIntegerField(null=True, blank=True)
 
     vehicle_type = models.CharField(max_length=50, choices=TRANSPORT_CHOICES)
     license_number = models.CharField(max_length=50, null=True, blank=True)

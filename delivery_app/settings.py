@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-z7$ro_)6rcdls)_s5-(*w7s&papg_q)s5%r8#gdjn30n-z$e=x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.0.91']
 
 
 # Application definition
@@ -58,6 +58,8 @@ JAZZMIN_SETTINGS = {
 
 
 ROOT_URLCONF = 'delivery_app.urls'
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 TEMPLATES = [
     {

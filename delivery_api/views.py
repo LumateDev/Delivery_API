@@ -13,17 +13,19 @@ class CourierActionAPIView(APIView):
             try:
                 courier = Courier.objects.get(external_id=courier_id)
                 serializer = CourierSerializer(courier)
-                return Response({'courier': serializer.data})
+                return Response({'couriers': serializer.data})
             except Courier.DoesNotExist:
                 return Response({'error': 'Courier not found'}, status=status.HTTP_404_NOT_FOUND)
         else:
             couriers = Courier.objects.all()
             serializer = CourierSerializer(couriers, many=True)
-            return Response({'courier': serializer.data})
+            return Response({'couriers': serializer.data})
 
     def post(self, request):
         data = request.data
         action = data.get('action')
+        debug = f"{data}\n{action}"
+        print(debug)
 
         if action == 11:  # Добавление курьера
             serializer = CourierSerializer(data=data.get('courier'))
@@ -74,6 +76,9 @@ class DeliveryDepartmentActionAPIView(APIView):
     def post(self, request):
         data = request.data
         action = data.get('action')
+        debug = f"{data}\n{action}"
+        print(debug)
+
 
         if action == 11:
             serializer = DeliveryDepartmentSerializer(data=data.get('department'))
