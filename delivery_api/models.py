@@ -10,12 +10,6 @@ class DeliveryDepartment(models.Model):
 
 
 class Courier(models.Model):
-    TRANSPORT_CHOICES = [
-        ('bike', 'Велосипед'),
-        ('car', 'Автомобиль'),
-        ('scooter', 'Скутер'),
-    ]
-
     external_id = models.CharField(primary_key=True, max_length=255)
     department = models.ForeignKey(
         DeliveryDepartment,
@@ -27,11 +21,10 @@ class Courier(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=255, unique=True, null=True, blank=True)
-    phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
+    email = models.EmailField(max_length=255, null=True, blank=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
     start_date = models.BigIntegerField(null=True, blank=True)
-
-    vehicle_type = models.CharField(max_length=50, choices=TRANSPORT_CHOICES)
+    vehicle_type = models.IntegerField(max_length=50, null=True, blank=True)
     license_number = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):

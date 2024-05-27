@@ -8,24 +8,32 @@ from .serializers import DeliveryDepartmentSerializer, CourierSerializer
 class CourierActionAPIView(APIView):
 
     def get(self, request):
+        print("GET запрос на CourierActionAPIView")
         courier_id = request.query_params.get('external_id')
         if courier_id:
             try:
                 courier = Courier.objects.get(external_id=courier_id)
                 serializer = CourierSerializer(courier)
-                return Response({'couriers': serializer.data})
+                response = Response({'couriers': serializer.data})
+                #print(f"Ответ: {response.data}")
+                return response
             except Courier.DoesNotExist:
-                return Response({'error': 'Courier not found'}, status=status.HTTP_404_NOT_FOUND)
+                response = Response({'error': 'Курьер не найден'}, status=status.HTTP_404_NOT_FOUND)
+                #print(f"Ответ: {response.data}")
+                return response
         else:
             couriers = Courier.objects.all()
             serializer = CourierSerializer(couriers, many=True)
-            return Response({'couriers': serializer.data})
+            response = Response({'couriers': serializer.data})
+            #print(f"Ответ: {response.data}")
+            return response
 
     def post(self, request):
+        print("POST запрос на CourierActionAPIView")
         data = request.data
         action = data.get('action')
-        debug = f"{data}\n{action}"
-        print(debug)
+        print(f"Данные запроса: {data}")
+        print(f"Действие: {action}")
 
         if action == 11:  # Добавление курьера
             serializer = CourierSerializer(data=data.get('courier'))
@@ -60,6 +68,8 @@ class CourierActionAPIView(APIView):
 
 class DeliveryDepartmentActionAPIView(APIView):
     def get(self, request):
+        print("GET запрос на DeliveryDepartmentActionAPIView")
+
         department_id = request.query_params.get('external_id')
         if department_id:
             try:
@@ -76,8 +86,9 @@ class DeliveryDepartmentActionAPIView(APIView):
     def post(self, request):
         data = request.data
         action = data.get('action')
-        debug = f"{data}\n{action}"
-        print(debug)
+        print("POST запрос на DeliveryDepartmentActionAPIView")
+        print(f"Данные запроса: {data}")
+        print(f"Действие: {action}")
 
 
         if action == 11:
